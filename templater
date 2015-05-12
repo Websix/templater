@@ -1,0 +1,127 @@
+#!/usr/bin/env node
+
+(function () {
+  //
+  // Dependencies
+  //
+
+  var argv = require('minimist')(process.argv.slice(2));
+  var Compiler = require('docxtemplater');
+  var ngExp = require('angular-expressions');
+  var q = require('q');
+  var fs = require('fs');
+  var buffer = [];
+  var input = argv.s === '-' ? process.stdin : fs.createReadStream(argv.s);
+  var output = argv.o === undefined || argv.o === false ? process.stdout : fs.createWriteStream(argv.o);
+
+  //
+  // Runtime
+  //
+
+  checkTemplate(argv.t)
+    .then(readData)
+    .then(validateData)
+    .then(compileData)
+    .then(outputCompiled)
+    .catch(handleError);
+
+  //
+  // Implementations
+  //
+
+  /**
+   * Verifies the existance of the template
+   *
+   * @param  {String} template Path to the template file
+   * @return {Promise}
+   */
+  function checkTemplate(template) {
+    var def = q.defer();
+
+    fs.access(template || '', fs.R_OK, function (err) {
+      if (err) {
+        def.reject(err);
+      } else {
+        def.resolve();
+      }
+    });
+
+    return def.promise;
+  }
+
+  /**
+   * Reads the data from input
+   *
+   * @return {Promise}
+   */
+  function readData () {
+    var buffer =[];
+    var def = q.defer();
+
+    input.on('data', function (data) {
+      buffer.push(new Buffer(data));
+      def.notify(data);
+    });
+
+    input.on('end', function () {
+      def.resolve(Buffer.concat(buffer));
+    });
+
+    input.on('error', function (err) {
+      def.reject(err);
+    });
+
+    return def.promise;
+  }
+
+  /**
+   * Validates and parses data
+   *
+   * @param  {String}  data String with data coded in JSON
+   * @return {Promise}
+   */
+  function validateData (data) {
+    return JSON.parse(data.toString());
+  }
+
+  /**
+   * Compilate data into the compiler
+   *
+   * @param  {String}  data String with data coded in JSON
+   * @return {Promise}
+   */
+  function compileData (data) {
+    var template = fs.readFileSync(argv.t);
+    var options = {
+      parser: getNgExpParser(),
+      delimiters: {
+        start: '${',
+        end: '}'
+      }
+    };
+    var doc = new Compiler(template).setOptions(options);
+
+    doc.setData(data);
+
+    doc.render();
+
+    return doc.getZip().generate({type: 'nodebuffer'});
+  }
+
+  function getNgExpParser() {
+    return function (tag) {
+      return {
+        get: tag == '.' ? function (s) { return s; } : ngExp.compile(tag)
+      };
+    };
+  }
+
+  function handleError (err) {
+    process.stderr.write(err.message + '\n');
+    process.exit(1);
+  }
+
+  function outputCompiled (data) {
+    output.end(data);
+  }
+})();
