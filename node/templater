@@ -9,6 +9,7 @@
   var Compiler = require('docxtemplater');
   var ImgModule = require('docxtemplater-image-module');
   var ngExp = require('angular-expressions');
+  var sizeOfImage = require('image-size');
   var q = require('q');
   var fs = require('fs');
   var buffer = [];
@@ -101,6 +102,9 @@
       }
     };
     var img = new ImgModule({ centered: true });
+
+    img.getSizeFromData = getImageSize;
+
     var doc = new Compiler()
       .attachModule(img)
       .load(template)
@@ -111,6 +115,11 @@
     doc.render();
 
     return doc.getZip().generate({type: 'nodebuffer'});
+  }
+
+  function getImageSize (img) {
+    var imgSize = sizeOfImage(img);
+    return [imgSize.width, imgSize.height];
   }
 
   function getNgExpParser() {
