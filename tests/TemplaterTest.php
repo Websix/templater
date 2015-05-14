@@ -32,7 +32,8 @@ class TemplaterTest extends \PHPUnit_Framework_TestCase
                         ]
                     ]
                 ]
-            ]
+            ],
+            'image' => realpath('/media/arquivo/caetano.jpg')
         ];
 
         $this->subject = new Templater();
@@ -48,5 +49,6 @@ class TemplaterTest extends \PHPUnit_Framework_TestCase
     public function testCompile()
     {
         $res = $this->subject->compileJson($this->template, json_encode($this->data));
+        file_put_contents('teste.docx', $res);
     }
 }
