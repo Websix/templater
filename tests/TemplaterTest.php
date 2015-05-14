@@ -36,6 +36,7 @@ class TemplaterTest extends \PHPUnit_Framework_TestCase
         ];
 
         $this->subject = new Templater();
+        $this->subject->setIsDebug();
         $this->template = realpath(__DIR__ . '/./testTemplate.docx');
     }
 
@@ -47,6 +48,5 @@ class TemplaterTest extends \PHPUnit_Framework_TestCase
     public function testCompile()
     {
         $res = $this->subject->compileJson($this->template, json_encode($this->data));
-        file_put_contents('test.docx', $res);
     }
 }
