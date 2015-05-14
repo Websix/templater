@@ -126,6 +126,7 @@
   }
 
   function outputCompiled (data) {
-    output.end(data);
+    var end = argv.o ? output.end : output.write;
+    end.call(output, data);
   }
 })();
