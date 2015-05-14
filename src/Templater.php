@@ -20,6 +20,11 @@ class Templater
     private $pipes = [];
 
     /**
+     * Defines if is to run with debug
+     */
+    private $isDebug = false;
+
+    /**
      * Creates the child process
      *
      * @param string $template Path to the template
@@ -27,6 +32,10 @@ class Templater
     private function open($template)
     {
         $cmd = sprintf('%s -s - -t %s', realpath($this->procname), $template);
+
+        if($this->isDebug) {
+            $cmd .= ' -d';
+        }
 
         $std = array(
             0 => array('pipe', 'r'),
@@ -87,5 +96,10 @@ class Templater
 
         return $result;
 
+    }
+
+    public function setIsDebug($isDebug = true)
+    {
+        $this->isDebug = is_bool($isDebug) and $isDebug;
     }
 }
