@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "bitbucket.org:websix/templater.git"
+    "url": "git@github.com:Websix/templater.git"
   },
   "author": "Reinaldo A. C. Rauch <reinaldorauch@mail.com>",
   "license": "ISC",
@@ -16,7 +16,6 @@
     "angular-expressions": "^0.2.1",
     "docxtemplater": "^1.0.5",
     "minimist": "^1.1.1",
-    "q": "^1.4.0",
-    "winston": "^1.0.0"
+    "q": "^1.4.0"
   }
 }

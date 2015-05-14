@@ -117,11 +117,16 @@
   }
 
   function handleError (err) {
-    process.stderr.write(err.message + '\n');
+    if(argv.d) {
+      process.stderr.write(err.message + '\n');
+      process.stderr.write(err.stack + '\n');
+    }
+
     process.exit(1);
   }
 
   function outputCompiled (data) {
-    output.end(data);
+    var end = argv.o ? output.end : output.write;
+    end.call(output, data);
   }
 })();
