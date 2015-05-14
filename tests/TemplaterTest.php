@@ -8,6 +8,8 @@ class TemplaterTest extends \PHPUnit_Framework_TestCase
 
     private $data;
 
+    private $template;
+
     public function setUp()
     {
         $this->data = [
@@ -34,6 +36,7 @@ class TemplaterTest extends \PHPUnit_Framework_TestCase
         ];
 
         $this->subject = new Templater();
+        $this->template = realpath(__DIR__ . '/./testTemplate.docx');
     }
 
     public function tearDown()
@@ -43,7 +46,7 @@ class TemplaterTest extends \PHPUnit_Framework_TestCase
 
     public function testCompile()
     {
-        $res = $this->subject->compileJson(json_encode($this->data));
+        $res = $this->subject->compileJson($this->template, json_encode($this->data));
         file_put_contents('test.docx', $res);
     }
 }
