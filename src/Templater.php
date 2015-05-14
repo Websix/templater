@@ -5,11 +5,6 @@ namespace Websix\Templater;
 class Templater
 {
     /**
-     * Subprocess initial command
-     */
-    private $procname = __DIR__ . '/../node/templater';
-
-    /**
      * Resource of subprocess
      */
     private $process;
@@ -31,7 +26,8 @@ class Templater
      */
     private function open($template)
     {
-        $cmd = sprintf('%s -s - -t %s', realpath($this->procname), $template);
+        $cmd = realpath(__DIR__ . '/../node/templater');
+        $cmd = sprintf('%s -s - -t %s', $cmd, $template);
 
         if($this->isDebug) {
             $cmd .= ' -d';
