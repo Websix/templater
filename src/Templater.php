@@ -26,7 +26,7 @@ class Templater
      */
     private function open($template)
     {
-        $cmd = sprintf('%s -s - -t %s', realpath($procname), $template);
+        $cmd = sprintf('%s -s - -t %s', realpath($this->procname), $template);
 
         $std = array(
             0 => array('pipe', 'r'),
