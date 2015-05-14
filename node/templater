@@ -7,6 +7,7 @@
 
   var argv = require('minimist')(process.argv.slice(2));
   var Compiler = require('docxtemplater');
+  var ImgModule = require('docxtemplater-image-module');
   var ngExp = require('angular-expressions');
   var q = require('q');
   var fs = require('fs');
@@ -99,7 +100,11 @@
         end: '}'
       }
     };
-    var doc = new Compiler(template).setOptions(options);
+    var img = new ImgModule({ centered: true });
+    var doc = new Compiler()
+      .attachModule(img)
+      .load(template)
+      .setOptions(options);
 
     doc.setData(data);
 
