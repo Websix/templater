@@ -33,7 +33,7 @@ class TemplaterTest extends \PHPUnit_Framework_TestCase
                     ]
                 ]
             ],
-            'image' => realpath('/media/arquivo/caetano.jpg')
+            'image' => realpath('./caetano.jpg')
         ];
 
         $this->subject = new Templater();
