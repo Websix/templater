@@ -98,6 +98,11 @@ class Templater
 
     }
 
+    /**
+     * Defines if the subprocess must run under debug mode
+     *
+     * @param bool $isDebug if is to run with debug or not
+     */
     public function setIsDebug($isDebug = true)
     {
         $this->isDebug = is_bool($isDebug) and $isDebug;
