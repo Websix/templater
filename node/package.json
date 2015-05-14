@@ -15,6 +15,7 @@
   "dependencies": {
     "angular-expressions": "^0.2.1",
     "docxtemplater": "^1.0.5",
+    "docxtemplater-image-module": "^0.3.3",
     "minimist": "^1.1.1",
     "q": "^1.4.0"
   }
