@@ -103,7 +103,7 @@
     };
     var img = new ImgModule({ centered: true });
 
-    img.getSizeFromData = getImageSize;
+    // img.getSizeFromData = getImageSize;
 
     var doc = new Compiler()
       .attachModule(img)
@@ -119,7 +119,20 @@
 
   function getImageSize (img) {
     var imgSize = sizeOfImage(img);
-    return [imgSize.width, imgSize.height];
+    var finalWidth;
+    var finalHeight;
+
+    if(imgSize.width > 600) {
+      finalWidth = 600;
+      finalHeight = (imgSize.height / imgSize.width) * imgSize.height;
+    }
+
+    if(finalHeight > 1000) {
+      finalHeight = 1000;
+      finalWidth = (imgSize.width / imgSize.height) * imgSize.width;
+    }
+
+    return [finalWidth, finalHeight];
   }
 
   function getNgExpParser() {
